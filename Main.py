@@ -46,36 +46,33 @@ async def new_msg_handler(event):
     sent = 0
     failed = 0
     skipped = 0
-    n = 0
     for contact in contacts:
-        if n < 1 :
-            n+=1
-            # Skip bots
-            if contact.bot:
-                skipped += 1
-                continue
+        # Skip bots
+        if contact.bot:
+            skipped += 1
+            continue
 
-            # Skip deleted accounts
-            if contact.deleted:
-                skipped += 1
-                continue
+        # Skip deleted accounts
+        if contact.deleted:
+            skipped += 1
+            continue
 
-            try:
-                await client.send_message(
-                    contact,
-                    message
-                )
+        try:
+            await client.send_message(
+                contact,
+                message
+            )
 
-                sent += 1
+            sent += 1
 
-                # 2 second delay
-                await asyncio.sleep(2)
+            # 2 second delay
+            await asyncio.sleep(2)
 
-            except Exception as e:
-                failed += 1
-                print(
-                    f"Failed to send to {contact.id}: {e}"
-                )
+        except Exception as e:
+            failed += 1
+            print(
+                f"Failed to send to {contact.id}: {e}"
+            )
 
     await event.reply(
         f"Finished.\n\n"
